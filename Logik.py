@@ -41,8 +41,7 @@ class App():
                 row[x].grid(column=x,row=y,padx=1,pady=1)
             self.play_btns.append(row)
         
-        
-        #skore
+        # Skore
         for y in range(10):
             self.score.append(Label(activeframe,text="0/0"))
             self.score[y].grid(column=6, row=y)
