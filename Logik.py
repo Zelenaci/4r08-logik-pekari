@@ -9,11 +9,19 @@ Created on Tue Mar  5 10:02:14 2019
 import webbrowser
 from random import randint
 from functools import partial
-from tkinter import Frame, Button, Radiobutton, Tk, W, N, NW, DISABLED, ACTIVE,Label
+from tkinter import Frame, Button, Radiobutton, Tk, W, N, NW, E, DISABLED, ACTIVE,Label,OptionMenu,StringVar
 
 ROWS = 10
 COLUMNS = 5
-COLORS = ["none","red", "lime", "blue", "yellow", "navy", "purple", "orange", "white"]
+COLORS = ["none",
+          "red",
+          "lime",
+          "blue",
+          "yellow",
+          "navy",
+          "purple",
+          "orange",
+          "white"]
 
 class App():
     def __init__(self, master):
@@ -31,7 +39,7 @@ class App():
         hiddenframe = Frame(master, width=320, height=320)
         hiddenframe.grid(column=0,row=0, sticky = W)
         for x in range(COLUMNS):
-            self.hidden_btns.append(Button(hiddenframe, bg="black", state=DISABLED, width=4, height=2))
+            self.hidden_btns.append(Button(hiddenframe, bg="black", state=DISABLED, width=8, height=4))
             self.hidden_btns[x].grid(column=x,row=0,padx=1,pady=1)
             self.hidden_stones.append(0)
 
@@ -52,13 +60,52 @@ class App():
             row_btns = []
             row_stones = []
             for x in range(COLUMNS):
-                row_btns.append(Button(activeframe, bg = "grey", width = 4, height = 2, command=partial(self.set_color, x, y, self.color_selected)))
+                row_btns.append(Button(activeframe, bg = "grey", width = 8, height = 4, command=partial(self.set_color, x, y, self.color_selected)))
                 row_btns[x].grid(column=x,row=y,padx=1,pady=1)
                 row_stones.append(0)
             
             self.play_btns.append(row_btns)
             self.play_stones.append(row_stones)
         
+         # Vyber barvy
+        colorframe = Frame(master,width=320,height=320)
+        colorframe.grid(column=0,row=3,sticky= W)
+        
+        var1=StringVar(master)
+        menu1=OptionMenu(colorframe,var1,*COLORS)
+        menu1.grid(column=0,row=0,pady=5)
+        menu1.config(width=4)
+        var2=StringVar(master)
+        menu2=OptionMenu(colorframe,var2,*COLORS)
+        menu2.grid(column=1,row=0,pady=5)
+        menu2.config(width=4)
+        var3=StringVar(master)
+        menu3=OptionMenu(colorframe,var3,*COLORS)
+        menu3.grid(column=2,row=0,pady=5)
+        menu3.config(width=4)
+        var4=StringVar(master)
+        menu4=OptionMenu(colorframe,var4,*COLORS)
+        menu4.grid(column=3,row=0,pady=5)
+        menu4.config(width=4)
+        var5=StringVar(master)
+        menu5=OptionMenu(colorframe,var5,*COLORS)
+        menu5.grid(column=4,row=0,pady=5)
+        menu5.config(width=4)
+            
+         #tlacitko nove hry
+        newgame_btn = Button(master,command=self.new_game,text="Opakovat hru",bd=5,bg="red")
+        newgame_btn.grid(column=0,row=4,padx=10,pady=10)
+        
+        #tlacitko dalsiho tahu
+        
+        turn_btn = Button(master,command=self.next_round,text="Potvrdit tah",bd=10,bg="lime")
+        turn_btn.grid(column=1,row=2,padx=10,pady=10)
+        
+        
+        # Skore
+        for y in range(ROWS):
+            self.score.append(Label(activeframe,text="-/-"))
+            self.score[y].grid(column=6, row=y)
     
     def new_game(self):    
         # vrchní skryté buttony 
@@ -93,6 +140,7 @@ class App():
             
         else:
             self.end_game("LOSE")
+            
             
     def set_color(self, x, y, color):
         self.play_stones[y][x] = color
