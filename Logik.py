@@ -40,7 +40,7 @@ class App():
         hiddenframe = Frame(master, width=320, height=320)
         hiddenframe.grid(column=0,row=0, sticky = W)
         for x in range(COLUMNS):
-            self.hidden_btns.append(Button(hiddenframe, bg="black", state=DISABLED, width=8, height=4))
+            self.hidden_btns.append(Button(hiddenframe, bg="black", state=DISABLED, width=4, height=2))
             self.hidden_btns[x].grid(column=x,row=0,padx=1,pady=1)
             self.hidden_stones.append(0)
 
@@ -61,7 +61,7 @@ class App():
             row_btns = []
             row_stones = []
             for x in range(COLUMNS):
-                row_btns.append(Button(activeframe, bg = "grey", width = 8, height = 4, command=partial(self.set_color, x, y)))
+                row_btns.append(Button(activeframe, bg = "grey", width = 4, height = 2, command=partial(self.set_color, x, y)))
                 row_btns[x].grid(column=x,row=y,padx=1,pady=1)
                 row_stones.append(0)
             
@@ -79,12 +79,12 @@ class App():
         menu1.config(width=4)
         
          #tlacitko nove hry
-        newgame_btn = Button(master,command=self.new_game,text="Opakovat hru",bd=5,bg="red")
-        newgame_btn.grid(column=0,row=4,padx=10,pady=10)
+        newgame_btn = Button(colorframe,command=self.new_game,text="Opakovat hru",bd=3,bg="red")
+        newgame_btn.grid(column=1,row=1,padx=10,pady=10)
         
         #tlacitko dalsiho tahu
-        turn_btn = Button(master,command=self.next_round,text="Potvrdit tah",bd=10,bg="lime")
-        turn_btn.grid(column=1,row=2,padx=10,pady=10)
+        turn_btn = Button(colorframe,command=self.next_round,text="Potvrdit tah",bd=8,bg="lime")
+        turn_btn.grid(column=1,row=0,padx=10,pady=10)
         
         
         # Skore
@@ -171,6 +171,7 @@ class Jukebox():
         
         
 root = Tk()
+root.geometry("400x700+0+0")
 app = App(root)
 app.new_game()
 root.mainloop()
