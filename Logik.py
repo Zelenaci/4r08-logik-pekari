@@ -9,8 +9,6 @@ Created on Tue Mar  5 10:02:14 2019
 #import tkinter as tk
 from tkinter import Frame, Button, Radiobutton, Tk, W, N, NW, DISABLED, ACTIVE,Label, Canvas
 
-
-
 class App():
     
     def __init__(self, master):
@@ -22,7 +20,7 @@ class App():
         hiddenframe = Frame(master, width=320, height=320)
         hiddenframe.grid(column=0,row=0, sticky = W)
         for i in range(5):
-            self.hidden_btns.append(Button(hiddenframe, bg="black", state=DISABLED))
+            self.hidden_btns.append(Button(hiddenframe, bg="black", state=DISABLED, width=4, height=2))
             self.hidden_btns[i].grid(column=i,row=0,padx=1,pady=1)
 
         #label logik
@@ -37,7 +35,7 @@ class App():
         for y in range(10):
             row = []
             for x in range(5):
-                row.append(Button(activeframe, bg="grey"))
+                row.append(Button(activeframe, bg="grey", width=4, height=2))
                 row[x].grid(column=x,row=y,padx=1,pady=1)
             self.play_btns.append(row)
         
