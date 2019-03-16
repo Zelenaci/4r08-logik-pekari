@@ -61,20 +61,20 @@ class App():
             row_btns = []
             row_stones = []
             for x in range(COLUMNS):
-                row_btns.append(Button(activeframe, bg = "grey", width = 8, height = 4, command=partial(self.set_color, x, y, self.color_selected)))
+                row_btns.append(Button(activeframe, bg = "grey", width = 8, height = 4, command=partial(self.set_color, x, y)))
                 row_btns[x].grid(column=x,row=y,padx=1,pady=1)
                 row_stones.append(0)
             
             self.play_btns.append(row_btns)
             self.play_stones.append(row_stones)
         
-         # Vyber barvy
+        # Vyber barvy
         colorframe = Frame(master,width=320,height=320)
         colorframe.grid(column=0,row=3,sticky= W)
-        #všechna menu na výběr barev pro jednotlivé sloupce
         
-        self.color_selected=StringVar(colorframe)
-        menu1=OptionMenu(colorframe,self.color_selected,*COLORS)
+        #všechna menu na výběr barev pro jednotlivé sloupce
+        colorMenuVar = StringVar(colorframe)
+        menu1 = OptionMenu(colorframe, colorMenuVar,*COLORS, command=self.save_color)
         menu1.grid(column=0,row=0,pady=5)
         menu1.config(width=4)
         
@@ -83,7 +83,6 @@ class App():
         newgame_btn.grid(column=0,row=4,padx=10,pady=10)
         
         #tlacitko dalsiho tahu
-        
         turn_btn = Button(master,command=self.next_round,text="Potvrdit tah",bd=10,bg="lime")
         turn_btn.grid(column=1,row=2,padx=10,pady=10)
         
@@ -92,6 +91,10 @@ class App():
         for y in range(ROWS):
             self.score.append(Label(activeframe,text="-/-"))
             self.score[y].grid(column=6, row=y)
+    
+    def getVal(self, x):
+        pass
+        print(x)
     
     def new_game(self):    
         # vrchní skryté buttony 
@@ -127,10 +130,13 @@ class App():
         else:
             self.end_game("LOSE")
             
-            
-    def set_color(self, x, y, color):
-        self.play_stones[y][x] = color
-        self.play_btns[y][x].configure(bg = COLORS[color])
+    def save_color(self, color):
+        self.color_selected = COLORS.index(color)
+        print(COLORS.index(color))
+    
+    def set_color(self, x, y):
+        self.play_stones[y][x] = self.color_selected
+        self.play_btns[y][x].configure(bg = COLORS[self.color_selected])
         self.check_colors()
         
     def check_colors(self):
