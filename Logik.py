@@ -70,23 +70,28 @@ class App():
          # Vyber barvy
         colorframe = Frame(master,width=320,height=320)
         colorframe.grid(column=0,row=3,sticky= W)
+        #všechna menu na výběr barev pro jednotlivé sloupce
         
         var1=StringVar(master)
         menu1=OptionMenu(colorframe,var1,*COLORS)
         menu1.grid(column=0,row=0,pady=5)
         menu1.config(width=4)
+        
         var2=StringVar(master)
         menu2=OptionMenu(colorframe,var2,*COLORS)
         menu2.grid(column=1,row=0,pady=5)
         menu2.config(width=4)
+        
         var3=StringVar(master)
         menu3=OptionMenu(colorframe,var3,*COLORS)
         menu3.grid(column=2,row=0,pady=5)
         menu3.config(width=4)
+        
         var4=StringVar(master)
         menu4=OptionMenu(colorframe,var4,*COLORS)
         menu4.grid(column=3,row=0,pady=5)
         menu4.config(width=4)
+        
         var5=StringVar(master)
         menu5=OptionMenu(colorframe,var5,*COLORS)
         menu5.grid(column=4,row=0,pady=5)
