@@ -60,8 +60,7 @@ class App():
             row_btns = []
             row_stones = []
             for x in range(COLUMNS):
-                row_btns.append(Button(activeframe, bg = "grey", width = 4, height = 2, command=partial(self.set_color, x, y, self.color_selected)))
-                row_btns.append(Button(activeframe, bg = "grey", width = 8, height = 4, state = btn_state, command=partial(self.set_color, x, y, self.color_selected)))
+                row_btns.append(Button(activeframe, bg = "grey", width = 8, height = 4, command=partial(self.set_color, x, y, self.color_selected)))
                 row_btns[x].grid(column=x,row=y,padx=1,pady=1)
                 row_stones.append(0)
             
