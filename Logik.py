@@ -47,6 +47,7 @@ class App():
         label=Label(master, text="Logik")
         label.grid(column=0,row=1,columnspan=COLUMNS)
 
+       
         # Herní buttony
         activeframe = Frame(master, width=320, height=320)
         activeframe.grid(column=0,row=2, sticky = W)
@@ -85,6 +86,9 @@ class App():
         # tlacitko dalsiho tahu
         self.turn_btn = Button(colorframe,command=self.next_round,text="Potvrdit tah",bd=8,bg="lime")
         self.turn_btn.grid(column=1,row=0,padx=10,pady=10)
+        
+        label1=Label(colorframe,text="Barva/Pozice")
+        label1.grid(column=2,row=0)
         
         # Skore
         for y in range(ROWS):
