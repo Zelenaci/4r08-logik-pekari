@@ -34,6 +34,7 @@ class App():
         
         self.color_selected = 8
         self.round = 0
+    
         
         # vrchní skryté buttony 
         hiddenframe = Frame(master, width=320, height=320)
@@ -72,31 +73,11 @@ class App():
         colorframe.grid(column=0,row=3,sticky= W)
         #všechna menu na výběr barev pro jednotlivé sloupce
         
-        var1=StringVar(master)
-        menu1=OptionMenu(colorframe,var1,*COLORS)
+        self.color_selected=StringVar(colorframe)
+        menu1=OptionMenu(colorframe,self.color_selected,*COLORS)
         menu1.grid(column=0,row=0,pady=5)
         menu1.config(width=4)
         
-        var2=StringVar(master)
-        menu2=OptionMenu(colorframe,var2,*COLORS)
-        menu2.grid(column=1,row=0,pady=5)
-        menu2.config(width=4)
-        
-        var3=StringVar(master)
-        menu3=OptionMenu(colorframe,var3,*COLORS)
-        menu3.grid(column=2,row=0,pady=5)
-        menu3.config(width=4)
-        
-        var4=StringVar(master)
-        menu4=OptionMenu(colorframe,var4,*COLORS)
-        menu4.grid(column=3,row=0,pady=5)
-        menu4.config(width=4)
-        
-        var5=StringVar(master)
-        menu5=OptionMenu(colorframe,var5,*COLORS)
-        menu5.grid(column=4,row=0,pady=5)
-        menu5.config(width=4)
-            
          #tlacitko nove hry
         newgame_btn = Button(master,command=self.new_game,text="Opakovat hru",bd=5,bg="red")
         newgame_btn.grid(column=0,row=4,padx=10,pady=10)
@@ -175,7 +156,7 @@ class App():
         if state == "WIN":
             pass
         elif state == "LOSE":
-            webbrowser.open("https://youtu.be/gH476CxJxfg")
+            pass
             
 class Jukebox():
     def __init__(self):
@@ -186,6 +167,4 @@ class Jukebox():
 root = Tk()
 app = App(root)
 app.new_game()
-app.show_stones()
-app.end_game("LOSE")
 root.mainloop()
