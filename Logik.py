@@ -6,6 +6,7 @@ Created on Tue Mar  5 10:02:14 2019
 @authors: KrySt
 """
 
+import os
 import webbrowser
 from random import randint
 from functools import partial
@@ -177,10 +178,11 @@ class Jukebox():
         self.played_win_songs = []
         self.played_lose_songs = []
         
+        with open("/jukebox/win_playlist.txt", "r") as win_play, open("/jukebox/lose_playlist.txt", "r") as lose_play:
+            
+            
         
 root = Tk()
 app = App(root)
 app.new_game()
-app.show_stones()
-app.end_game("LOSE")
 root.mainloop()
