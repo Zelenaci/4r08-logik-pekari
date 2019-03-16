@@ -167,14 +167,61 @@ class App():
             
 class Jukebox():
     def __init__(self):
-        self.played_win_songs = []
-        self.played_lose_songs = []
+        self.win_songs = []
+        self.lose_songs = []
         
-        with open("/jukebox/win_playlist.txt", "r") as win_play, open("/jukebox/lose_playlist.txt", "r") as lose_play:
-            
-            
+        self.load_songs("WIN")
+        self.load_songs("LOSE")
+    
+    def load_songs(self, win_or_lose):
+        song_files = ["jukebox\win_playlist.txt", "jukebox\lose_playlist.txt"]
+        song_vars = [self.win_songs, self.lose_songs] 
+        win_or_lose = 0 if win_or_lose == "WIN" else 1
+         
+        # File size check
+        try:
+            if os.path.getsize(song_files[win_or_lose]) > 4096:
+                return
+        except FileNotFoundError:
+            return
         
+        # Song loading
+        with open(song_files[win_or_lose], "r") as f:
+            while True:
+                song = f.readline()
+                if song:
+                    song_vars[win_or_lose].append(song)
+                else:
+                    break
+                    
+    def play_random(self, win_or_lose):
+        songs = self.win_songs if win_or_lose == "WIN" else self.lose_songs
+        
+        # No songs? Try to load it!
+        if not songs:
+            self.load_songs(win_or_lose)
+        
+        # Still nothing? Well, playlist may be corrupted, so enjoy the silence!
+        if not songs:
+            return
+        
+        song = songs.pop(randint(0,len(songs)-1))
+        webbrowser.open(song)
+        
+    def print_songs(self):
+        print("_______________Win________________")
+        print(self.win_songs)
+        print("_______________Lose_______________")
+        print(self.lose_songs)
+        
+    
+    
 root = Tk()
 app = App(root)
 app.new_game()
+
+jukebox = Jukebox()
+jukebox.play_random("LOSE")
+jukebox.print_songs()
+
 root.mainloop()
