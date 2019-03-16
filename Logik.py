@@ -10,12 +10,11 @@ import os
 import webbrowser
 from random import randint
 from functools import partial
-from tkinter import Frame, Button, Radiobutton, Tk, W, N, NW, E, DISABLED, ACTIVE,Label,OptionMenu,StringVar
+from tkinter import Frame, Button, Radiobutton, Tk, W, N, NW, E, DISABLED, NORMAL, Label, OptionMenu, StringVar
 
 ROWS = 10
 COLUMNS = 5
-COLORS = ["none",
-          "red",
+COLORS = ["red",
           "lime",
           "blue",
           "yellow",
@@ -33,9 +32,8 @@ class App():
         self.hidden_stones = []
         self.play_stones = []
         
-        self.color_selected = 8
+        self.color_selected = "NONE"
         self.round = 0
-    
         
         # vrchní skryté buttony 
         hiddenframe = Frame(master, width=320, height=320)
@@ -45,7 +43,7 @@ class App():
             self.hidden_btns[x].grid(column=x,row=0,padx=1,pady=1)
             self.hidden_stones.append(0)
 
-        #label logik
+        # label logik
         label=Label(master, text="Logik")
         label.grid(column=0,row=1,columnspan=COLUMNS)
 
@@ -62,9 +60,10 @@ class App():
             row_btns = []
             row_stones = []
             for x in range(COLUMNS):
-                row_btns.append(Button(activeframe, bg = "grey", width = 4, height = 2, command=partial(self.set_color, x, y)))
+                row_btns.append(Button(activeframe, bg = "grey", width = 4, height = 2, 
+                                       command=partial(self.set_color, x, y)))
                 row_btns[x].grid(column=x,row=y,padx=1,pady=1)
-                row_stones.append(0)
+                row_stones.append("NONE")
             
             self.play_btns.append(row_btns)
             self.play_stones.append(row_stones)
@@ -73,74 +72,76 @@ class App():
         colorframe = Frame(master,width=320,height=320)
         colorframe.grid(column=0,row=3,sticky= W)
         
-        #všechna menu na výběr barev pro jednotlivé sloupce
+        # všechna menu na výběr barev pro jednotlivé sloupce
         colorMenuVar = StringVar(colorframe)
         menu1 = OptionMenu(colorframe, colorMenuVar,*COLORS, command=self.save_color)
         menu1.grid(column=0,row=0,pady=5)
         menu1.config(width=4)
         
-         #tlacitko nove hry
+        # tlacitko nove hry
         newgame_btn = Button(colorframe,command=self.new_game,text="Opakovat hru",bd=3,bg="red")
         newgame_btn.grid(column=1,row=1,padx=10,pady=10)
         
-        #tlacitko dalsiho tahu
-        turn_btn = Button(colorframe,command=self.next_round,text="Potvrdit tah",bd=8,bg="lime")
-        turn_btn.grid(column=1,row=0,padx=10,pady=10)
-        
+        # tlacitko dalsiho tahu
+        self.turn_btn = Button(colorframe,command=self.next_round,text="Potvrdit tah",bd=8,bg="lime")
+        self.turn_btn.grid(column=1,row=0,padx=10,pady=10)
         
         # Skore
         for y in range(ROWS):
             self.score.append(Label(activeframe,text="-/-"))
             self.score[y].grid(column=6, row=y)
-    
-    def getVal(self, x):
-        pass
-        print(x)
+        
+        self.new_game()    
+    #______________________________________________________________________________________________#
     
     def new_game(self):    
+        self.round = 0
+        self.turn_btn.configure(state = NORMAL)
+        
         # vrchní skryté buttony 
         for x in range(COLUMNS):
             self.hidden_btns[x].configure(bg = "black")
-            self.hidden_stones[x] = randint(1, len(COLORS)-1)                 # Start from color [1], [0] = none color 
+            self.hidden_stones[x] = randint(0, len(COLORS)-1)
             
         for y in range(ROWS):
             # Skore
             self.score[y].configure(text="-/-")
             
             # Herní buttony
-            btn_state = ACTIVE if ROWS-1-y == self.round else DISABLED
+            btn_state = NORMAL if ROWS-1-y == self.round else DISABLED
             for x in range(COLUMNS):
                 self.play_btns[y][x].configure(state = btn_state, bg = "grey")
                 self.play_stones[y][x] = 0
-                
-            
+                       
     def show_stones(self):
         for i in range(COLUMNS):
             self.hidden_btns[i].configure(bg = COLORS[self.hidden_stones[i]])
             
     def next_round(self):
+        self.check_score()
+        
         for i in range(COLUMNS):
             self.play_btns[ROWS-1-self.round][i].configure(state = DISABLED)
-            pass
         
         if self.round+1 < ROWS:
             self.round += 1
             for i in range(COLUMNS):
-                self.play_btns[ROWS-1-self.round][i].configure(state = ACTIVE)
+                self.play_btns[ROWS-1-self.round][i].configure(state = NORMAL)
             
         else:
             self.end_game("LOSE")
             
     def save_color(self, color):
         self.color_selected = COLORS.index(color)
-        print(COLORS.index(color))
     
     def set_color(self, x, y):
+        if self.color_selected == "NONE":
+            return
+        
         self.play_stones[y][x] = self.color_selected
         self.play_btns[y][x].configure(bg = COLORS[self.color_selected])
-        self.check_colors()
         
-    def check_colors(self):
+    def check_score(self):
         position_color_counter = 0
         color_only_counter = 0
         
@@ -157,14 +158,12 @@ class App():
         if position_color_counter == COLUMNS:
             self.end_game("WIN")
             
-    def end_game(self, state):
+    def end_game(self, win_or_lose):
         self.show_stones()
+        self.turn_btn.configure(state = DISABLED)
+        jukebox.play_random(win_or_lose)
+     
         
-        if state == "WIN":
-            pass
-        elif state == "LOSE":
-            pass
-            
 class Jukebox():
     def __init__(self):
         self.win_songs = []
@@ -208,21 +207,9 @@ class Jukebox():
         song = songs.pop(randint(0,len(songs)-1))
         webbrowser.open(song)
         
-    def print_songs(self):
-        print("_______________Win________________")
-        print(self.win_songs)
-        print("_______________Lose_______________")
-        print(self.lose_songs)
-        
-    
-    
+      
 root = Tk()
-root.geometry("400x700+0+0")
+root.geometry("255x600+0+0")
 app = App(root)
-app.new_game()
-
 jukebox = Jukebox()
-jukebox.play_random("LOSE")
-jukebox.print_songs()
-
 root.mainloop()
