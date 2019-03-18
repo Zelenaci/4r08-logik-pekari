@@ -8,7 +8,7 @@ Created on Tue Mar  5 10:02:14 2019
 
 import os
 import webbrowser
-from random import randint
+from random import randint, sample
 from functools import partial
 from tkinter import Frame, Button, Radiobutton, Tk, W, N, NW, E, DISABLED, NORMAL, Label, OptionMenu, StringVar
 
@@ -105,7 +105,7 @@ class App():
         # vrchní skryté buttony 
         for x in range(COLUMNS):
             self.hidden_btns[x].configure(bg = "black")
-            self.hidden_stones[x] = randint(0, len(COLORS)-1)
+        self.hidden_stones = sample(range(len(COLORS)), COLUMNS)
             
         for y in range(ROWS):
             # Skore
