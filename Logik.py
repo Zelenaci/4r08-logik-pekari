@@ -115,7 +115,7 @@ class App():
             btn_state = NORMAL if ROWS-1-y == self.round else DISABLED
             for x in range(COLUMNS):
                 self.play_btns[y][x].configure(state = btn_state, bg = "grey")
-                self.play_stones[y][x] = 0
+                self.play_stones[y][x] = "NONE"
                        
     def show_stones(self):
         for i in range(COLUMNS):
@@ -177,7 +177,7 @@ class Jukebox():
         self.load_songs("LOSE")
     
     def load_songs(self, win_or_lose):
-        song_files = ["jukebox\win_playlist.txt", "jukebox\lose_playlist.txt"]
+        song_files = ["jukebox/win_playlist.txt", "jukebox/lose_playlist.txt"]
         song_vars = [self.win_songs, self.lose_songs] 
         win_or_lose = 0 if win_or_lose == "WIN" else 1
          
@@ -186,6 +186,7 @@ class Jukebox():
             if os.path.getsize(song_files[win_or_lose]) > 4096:
                 return
         except FileNotFoundError:
+            print(song_files[win_or_lose])
             return
         
         # Song loading
@@ -213,7 +214,8 @@ class Jukebox():
         
       
 root = Tk()
-root.geometry("255x600+0+0")
+root.geometry("350x620+0+0")
+root.title("Logik")
 app = App(root)
 jukebox = Jukebox()
 root.mainloop()
